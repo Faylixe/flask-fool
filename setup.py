@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" TODO : Document. """
+""" A Flask extension that prevents browser access to API by faking browser error pages. """
 
 import os
 
