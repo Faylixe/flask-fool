@@ -16,7 +16,7 @@ From now if any error is caught by the application and the query has been emitte
 an error page corresponding to the used browser will be returned, suggesting that the queried
 domain does not exist.
 
-# User agent filtering
+## User agent filtering
 
 You can also just want your API never been reached by a web browser. In that case you can
 specify a custom user agent for which only request will be received :
