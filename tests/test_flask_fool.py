@@ -18,33 +18,32 @@ _FIREFOX = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/
 
 
 @fixture
-def client():
+def user_agent_client():
     """ Simple extension fixture. """
     def _view():
         return 'OK', 200
     application = Flask('test-application')
     application.add_url_rule('/', 'page', view_func=_view)
     extension = FlaskFool()
-    extension.init_app(application)
-    extension.add_agent(_ALLOWED)
+    extension.init_app(application, _ALLOWED)
     return application.test_client()
 
 
-def test_allowed_agent(client):
+def test_allowed_agent(user_agent_client):
     """ Test successful request. """
     response = client.get('/', headers={'User-Agent': _ALLOWED})
     assert response.status_code == 200
     assert response.data =='OK'
 
 
-def test_chrome_agent(client):
+def test_chrome_agent(user_agent_client):
     """ Test unallowed with chrome user agent. """
     response = client.get('/', headers={'User-Agent': _CHROME})
     assert response.status_code == 404
     # TODO : Check response content.
 
 
-def test_firefox_agent(client):
+def test_firefox_agent(user_agent_client):
     """ Test unallowed with firefox user agent. """
     response = client.get('/', headers={'User-Agent': _FIREFOX})
     assert response.status_code == 404
