@@ -30,7 +30,7 @@ setup(
     author='Faylixe',
     author_email='felix@voituret.fr',
     url='https://github.com/Faylixe/flask-fool',
-    download_url='https://github.com/Faylixe/flask-fool/archive/1.0.0.tar.gz'
+    download_url='https://github.com/Faylixe/flask-fool/archive/1.0.0.tar.gz',
     packages=packages,
     zip_safe=False,
     include_package_data=True,
