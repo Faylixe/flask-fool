@@ -1,6 +1,6 @@
 # flask-fool
 
-![pypi](https://badge.fury.io/py/flask-fool.svg)
+![pypi](https://badge.fury.io/py/flask-fool.svg)(https://pypi.python.org/pypi/Flask-Fool) [![CircleCI](https://circleci.com/gh/Faylixe/flask-fool.svg?style=shield)](https://circleci.com/gh/Faylixe/flask-fool)
 
 A Flask extension that prevents browser access to API by faking browser error pages.
 
