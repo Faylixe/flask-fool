@@ -8,7 +8,7 @@ from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
 
 __author__ = 'fv'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 
 

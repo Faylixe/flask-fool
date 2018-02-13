@@ -22,7 +22,7 @@ packages = find_packages()
 
 setup(
     name='Flask-Fool',
-    version='1.0.0',
+    version='1.0.1',
     description=__doc__,
     long_description=readme,
     keywords='flask fool',
@@ -30,7 +30,7 @@ setup(
     author='Faylixe',
     author_email='felix@voituret.fr',
     url='https://github.com/Faylixe/flask-fool',
-    download_url='https://github.com/Faylixe/flask-fool/archive/1.0.0.tar.gz',
+    download_url='https://github.com/Faylixe/flask-fool/archive/1.0.1.tar.gz',
     packages=packages,
     zip_safe=False,
     include_package_data=True,
