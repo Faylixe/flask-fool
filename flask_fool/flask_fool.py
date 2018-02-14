@@ -3,12 +3,12 @@
 
 """ Flask fool extension provide API hiding trick for JSON web services. """
 
-from flask import request, render_template
+from flask import jsonify, request, render_template
 from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
 
 __author__ = 'fv'
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 
