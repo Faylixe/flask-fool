@@ -8,7 +8,7 @@ A Flask extension that prevents browser access to API by faking browser error pa
 
 ```python
 from flask import flask
-from flask.ext.flask_fool import FlaskFool
+from flask_fool import FlaskFool
 
 app = Flask('myapp')
 fooler = FlaskFool(app)
@@ -25,7 +25,7 @@ specify a custom user agent for which only request will be received :
 
 ```python
 from flask import flask
-from flask.ext.flask_fool import FlaskFool
+from flask_fool import FlaskFool
 
 app = Flask('myapp')
 fooler = FlaskFool(app, agent='MyCustomUserAgent')

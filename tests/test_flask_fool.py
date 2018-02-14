@@ -7,7 +7,7 @@ from flask import Flask
 from pytest import fixture
 from requests import get
 
-from flask_fool.flask_fool import FlaskFool
+from flask_fool import FlaskFool
 
 __author__ = 'fv'
 __version__ = '1.0.0'

@@ -5,3 +5,5 @@
 
 __author__ = 'fv'
 __version__ = '1.0.2'
+
+from flask_fool import *
