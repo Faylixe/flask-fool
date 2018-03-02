@@ -10,7 +10,6 @@ from requests import get
 from flask_fool import FlaskFool
 
 __author__ = 'fv'
-__version__ = '1.0.0'
 
 _ALLOWED = 'MyCustomUserAgent'
 _CHROME = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'

@@ -5,10 +5,11 @@
 
 import os
 import sys
-from flask_fool.version import __version__ as VERSION
 
 from setuptools import find_packages, setup
 from setuptools.command.install import install
+
+VERSION = '1.0.6'
 
 
 def readme():
