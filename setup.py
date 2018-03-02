@@ -52,7 +52,7 @@ setup(
     author_email='felix@voituret.fr',
     url=_URL,
     download_url=_TAG_URL % flask_fool.__version__,
-    packages=['flsak_fool'],
+    packages=['flask_fool'],
     include_package_data=True,
     install_requires=['flask'],
     cmdclass={'verify': VerifyVersionCommand},
