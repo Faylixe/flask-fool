@@ -8,6 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
           - v1-dependencies-{{ checksum "requirements.txt" }}
           - v1-dependencies-
       - run:
@@ -20,10 +21,10 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            python setup.py test
+            pytest tests/
           

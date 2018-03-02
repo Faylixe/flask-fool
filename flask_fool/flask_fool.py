@@ -4,12 +4,12 @@
 """ Flask fool extension provide API hiding trick for JSON web services. """
 
 from flask import request, render_template
+from jinja2 import ChoiceLoader, PackageLoader
 from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
 
 __author__ = 'fv'
 __version__ = '1.0.1'
-
 
 
 def _is_browser():
@@ -18,30 +18,40 @@ def _is_browser():
 
     :returns: True if request has been emitted from a browser, False otherwise.
     """
+    # TODO : Handle more browser.
     return request.user_agent.browser in ['firefox', 'chrome']
 
 
-def _deny_browser():
-    """ Deny the browser usage of this request.
+def _deny():
+    """ Deny the usage of this request.
 
     :returns: Error page response.
     """
     browser = request.user_agent.browser
     hostname = request.remote_addr
     if browser == 'firefox':
-        return render_tempate('firefox.html', hostname=hostname), 404
+        return render_template('firefox.html', hostname=hostname), 404
+    if browser == 'chrome':
+        return render_template('chrome.html', hostname=hostname), 404
+    # TODO : Handle default browser page.
     return render_tempate('chrome.html', hostname=hostname), 404
 
 
 class FlaskFool(object):
     """ The request proxy fooler :). """
 
-    def __init__(self, application=None, user_agent=None):
+    def __init__(
+            self,
+            application=None,
+            disallow_browser=False,
+            user_agent=None):
         """ Default constructor.
 
-        :param application: (Optional)
-        :param user_agent: (Optional)
+        :param application: (Optional) Target flask application.
+        :param disallow_browser: (Optional) Indicates if browser is supported.
+        :param user_agent: (Optional) User agent allowed.
         """
+        self._disallow_browser = disallow_browser
         self._user_agent = user_agent
         if application is not None:
             self.init_app(application)
@@ -54,9 +64,18 @@ class FlaskFool(object):
         :param application: Application to configure.
         """
         self._application = application
+        loader = ChoiceLoader([
+            PackageLoader('flask_fool'),
+            self._application.jinja_loader
+        ])
+        self._application.jinja_loader = loader
         for code in default_exceptions:
             self._application.register_error_handler(code, self._on_error)
-        if self._user_agent is not None:
+        filter_all = any([
+            self._user_agent is not None,
+            self._disallow_browser
+        ])
+        if filter_all:
             self._application.before_request(self._on_request)
 
     def _on_error(self, exception):
@@ -67,7 +86,7 @@ class FlaskFool(object):
         :returns: Transformed exception into a JSON error response.
         """
         if _is_browser():
-            return _deny_browser()
+            return _deny()
         response = jsonify(message=str(exception))
         response.status_code = 500
         if isinstance(exception, HTTPException):
@@ -80,5 +99,7 @@ class FlaskFool(object):
 
         :returns: An error page based on the browser (eventually).
         """
+        if self._disallow_browser:
+            return _deny()
         if request.user_agent.string != self._user_agent:
-            return _deny_browser()
+            return _deny()
