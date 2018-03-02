@@ -79,7 +79,7 @@ class FlaskFool(object):
         if browser == 'chrome':
             return render_template('chrome.html', hostname=hostname), 404
         # TODO : Handle default browser page.
-        return render_tempate('chrome.html', hostname=hostname), 404
+        return render_template('chrome.html', hostname=hostname), 404
 
     def _on_error(self, exception):
         """ Custom error handler method used to generate
