@@ -33,7 +33,7 @@ class VerifyVersionCommand(install):
 
     def run(self):
         tag = os.getenv('CIRCLE_TAG')
-        if tag != VERSION:
+        if tag != flask_fool.__version__:
             sys.exit(
                 'Git tag %s does not match the current flask fool version %s'
                 % (tag, flask_fool.__version__))
