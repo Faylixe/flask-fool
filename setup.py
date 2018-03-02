@@ -20,7 +20,7 @@ def readme():
     """ Transform the given markdown README to RST. """
     try:
         from m2r import parse_from_file
-        return parse_from_file('README.md')
+        return re.sub(r'\n+', '\n', parse_from_file('README.md'))
     except ImportError:
         with open('README.md') as stream:
             return stream.read()
