@@ -2,15 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.6
     working_directory: ~/flask-fool
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          - v1-dependencies-
+          - build-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
       - run:
           name: install dependencies
           command: |
@@ -21,10 +19,60 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
+          key: build-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
       - run:
           name: run tests
           command: |
             . venv/bin/activate
             pytest tests/
-          
+  deploy:
+    docker:
+      - image: circleci/python:3.6
+    working_directory: ~/flask-fool
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - deploy-dependencies-{{ checksum "requirements.txt" }}
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - save_cache:
+          paths:
+            - ./venv
+          key: deploy-dependencies-{{ checksum "requirements.txt" }}
+      - run:
+          name: check version
+          command: |
+            . venv/bin/activate
+            python setup.py verify
+      - run:
+          name: create pypirc
+          command: |
+            echo -e "[distutils]" > ~/.pypirc
+            echo -e "index-servers=" >> ~/.pypirc
+            echo -e " pypi" >> ~/.pypirc
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "repository=https://upload.pypi.org/legacy" >> ~/.pypirc
+            echo -e "username=$PYPI_USERNAME" >> ~/.pypirc
+            echo -e "password=$PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: upload
+          command: |
+            . venv/bin/activate
+            python setup.py sdist upload -r pypi
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/

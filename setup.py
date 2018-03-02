@@ -9,42 +9,46 @@ by faking browser error pages.
 """
 
 import os
+import sys
+import flask_fool
 
 from setuptools import find_packages, setup
-from flask_fool import __version__
+from setuptools.command.install import install
 
-readme = open('README.md').read()
 
-tests_require = ['pytest>=2.8.0']
-setup_requires = ['pytest-runner>=2.6.2']
-install_requires = ['Flask>=0.10']
+def readme():
+    """ """
+    with open('README.md') as stream:
+        return stream.read()
 
-extras_require = {'tests': tests_require}
-extras_require['all'] = []
-for reqs in extras_require.values():
-    extras_require['all'].extend(reqs)
 
-packages = find_packages()
+class VerifyVersionCommand(install):
+    """ Custom command to verify that the git tag matches our version """
+
+    description = 'verify that the git tag matches our version'
+
+    def run(self):
+        tag = os.getenv('CIRCLE_TAG')
+        if tag != VERSION:
+            sys.exit(
+                'Git tag %s does not match the current flask fool version %s'
+                % (tag, flask_fool.__version__))
 
 setup(
-    name='Flask-Fool',
-    version=__version__,
+    name='flask-fool',
+    version=flask_fool.__version__,
     description=__doc__,
-    long_description=readme,
+    long_description=readme(),
     keywords='flask fool',
     license='Apache Licence 2.0',
-    author='Faylixe',
+    author='Felix Voituret',
     author_email='felix@voituret.fr',
     url='https://github.com/Faylixe/flask-fool',
     download_url='https://github.com/Faylixe/flask-fool/archive/%s.tar.gz' % __version__,
-    packages=packages,
-    zip_safe=False,
+    packages=['flsak_fool'],
     include_package_data=True,
-    platforms='any',
-    extras_require=extras_require,
-    install_requires=install_requires,
-    setup_requires=setup_requires,
-    tests_require=tests_require,
+    install_requires=['flask'],
+    cmdclass={'verify': VerifyVersionCommand},
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -57,5 +61,5 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Development Status :: 5 - Production/Stable',
-    ],
+    ]
 )
