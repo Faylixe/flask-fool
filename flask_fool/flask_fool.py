@@ -21,21 +21,6 @@ def _is_browser():
     return request.user_agent.browser in ['firefox', 'chrome']
 
 
-def _deny():
-    """ Deny the usage of this request.
-
-    :returns: Error page response.
-    """
-    browser = request.user_agent.browser
-    hostname = request.remote_addr
-    if browser == 'firefox':
-        return render_template('firefox.html', hostname=hostname), 404
-    if browser == 'chrome':
-        return render_template('chrome.html', hostname=hostname), 404
-    # TODO : Handle default browser page.
-    return render_tempate('chrome.html', hostname=hostname), 404
-
-
 class FlaskFool(object):
     """ The request proxy fooler :). """
 
@@ -52,6 +37,7 @@ class FlaskFool(object):
         """
         self._disallow_browser = disallow_browser
         self._user_agent = user_agent
+        self._hostname = None
         if application is not None:
             self.init_app(application)
 
@@ -63,6 +49,8 @@ class FlaskFool(object):
         :param application: Application to configure.
         """
         self._application = application
+        if 'HOST' in application.config:
+            self._hostname = application.config['HOST']
         loader = ChoiceLoader([
             PackageLoader('flask_fool'),
             self._application.jinja_loader
@@ -77,6 +65,22 @@ class FlaskFool(object):
         if filter_all:
             self._application.before_request(self._on_request)
 
+    def _deny(self):
+        """ Deny the usage of this request.
+
+        :returns: Error page response.
+        """
+        browser = request.user_agent.browser
+        hostname = request.remote_addr
+        if self._hostname is not None:
+            hostname = self._hostname
+        if browser == 'firefox':
+            return render_template('firefox.html', hostname=hostname), 404
+        if browser == 'chrome':
+            return render_template('chrome.html', hostname=hostname), 404
+        # TODO : Handle default browser page.
+        return render_tempate('chrome.html', hostname=hostname), 404
+
     def _on_error(self, exception):
         """ Custom error handler method used to generate
         JSON error message for the given exception.
@@ -85,7 +89,7 @@ class FlaskFool(object):
         :returns: Transformed exception into a JSON error response.
         """
         if _is_browser():
-            return _deny()
+            return self._deny()
         response = jsonify(message=str(exception))
         response.status_code = 500
         if isinstance(exception, HTTPException):
@@ -99,6 +103,6 @@ class FlaskFool(object):
         :returns: An error page based on the browser (eventually).
         """
         if self._disallow_browser:
-            return _deny()
+            return self._deny()
         if request.user_agent.string != self._user_agent:
-            return _deny()
+            return self._deny()

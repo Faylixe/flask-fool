@@ -9,7 +9,7 @@ import sys
 from setuptools import find_packages, setup
 from setuptools.command.install import install
 
-VERSION = '1.0.6'
+VERSION = '1.0.7'
 
 
 def readme():
