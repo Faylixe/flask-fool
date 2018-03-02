@@ -5,7 +5,6 @@
 
 from flask import Flask
 from pytest import fixture
-from requests import get
 
 from flask_fool import FlaskFool
 
@@ -95,11 +94,11 @@ def test_browser_forbidden(browser_forbidden_client):
 def test_firefox_agent(simple_client):
     """ Test error with firefox user agent. """
     data = _verify_failure(simple_client, _FIREFOX, '/foo')
-    assert 'mozilla' in data
-    assert '<title>Server Not Found</title>' in data
+    assert b'mozilla' in data
+    assert b'<title>Server Not Found</title>' in data
 
 
 def test_chrome_agent(simple_client):
     """ Test error with chrome user agent. """
     data = _verify_failure(simple_client, _CHROME, '/foo')
-    assert 'chromium' in data
+    assert b'chromium' in data
