@@ -1,4 +1,4 @@
 flask
 pytest
 pytest-flask
-requests
+m2r

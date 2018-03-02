@@ -9,6 +9,8 @@ jobs:
       - restore_cache:
           keys:
           - build-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
+          - build-dependencies-{{ checksum "requirements.txt" }}-
+          - build-dependencies-
       - run:
           name: install dependencies
           command: |
@@ -33,17 +35,20 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - deploy-dependencies-{{ checksum "requirements.txt" }}
+          - deploy-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
+          - deploy-dependencies-{{ checksum "requirements.txt" }}-
+          - deploy-dependencies-
       - run:
           name: install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+            pip install -r requirements-test.txt
       - save_cache:
           paths:
             - ./venv
-          key: deploy-dependencies-{{ checksum "requirements.txt" }}
+          key: deploy-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
       - run:
           name: check version
           command: |

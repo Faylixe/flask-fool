@@ -17,9 +17,13 @@ from setuptools.command.install import install
 
 
 def readme():
-    """ """
-    with open('README.md') as stream:
-        return stream.read()
+    """ Transform the given markdown README to RST. """
+    try:
+        from m2r import parse_from_file
+        return parse_from_file('README.md')
+    except ImportError:
+        with open('README.md') as stream:
+            return stream.read()
 
 
 class VerifyVersionCommand(install):
