@@ -9,6 +9,7 @@ by faking browser error pages.
 """
 
 import os
+import re
 import sys
 import flask_fool
 
