@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" A Flask extension that prevents browser access to API by faking browser error pages. """
+"""
+
+A Flask extension that prevents browser access to API
+by faking browser error pages.
+
+"""
 
 import os
 
 from setuptools import find_packages, setup
+from flask_fool import __version__
 
 readme = open('README.md').read()
 
@@ -13,7 +19,7 @@ tests_require = ['pytest>=2.8.0']
 setup_requires = ['pytest-runner>=2.6.2']
 install_requires = ['Flask>=0.10']
 
-extras_require = { 'tests': tests_require }
+extras_require = {'tests': tests_require}
 extras_require['all'] = []
 for reqs in extras_require.values():
     extras_require['all'].extend(reqs)
@@ -22,7 +28,7 @@ packages = find_packages()
 
 setup(
     name='Flask-Fool',
-    version='1.0.2',
+    version=__version__,
     description=__doc__,
     long_description=readme,
     keywords='flask fool',
@@ -30,7 +36,7 @@ setup(
     author='Faylixe',
     author_email='felix@voituret.fr',
     url='https://github.com/Faylixe/flask-fool',
-    download_url='https://github.com/Faylixe/flask-fool/archive/1.0.2.tar.gz',
+    download_url='https://github.com/Faylixe/flask-fool/archive/%s.tar.gz' % __version__,
     packages=packages,
     zip_safe=False,
     include_package_data=True,
