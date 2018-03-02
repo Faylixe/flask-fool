@@ -34,6 +34,9 @@ class VerifyVersionCommand(install):
                 'Git tag %s does not match the current flask fool version %s'
                 % (tag, flask_fool.__version__))
 
+_URL = 'https://github.com/Faylixe/flask-fool
+_TAG_URL = _URL + '/archive/%s.tar.gz'
+
 setup(
     name='flask-fool',
     version=flask_fool.__version__,
@@ -43,8 +46,8 @@ setup(
     license='Apache Licence 2.0',
     author='Felix Voituret',
     author_email='felix@voituret.fr',
-    url='https://github.com/Faylixe/flask-fool',
-    download_url='https://github.com/Faylixe/flask-fool/archive/%s.tar.gz' % __version__,
+    url=_URL,
+    download_url=_TAG_URL % flask_fool.__version__,
     packages=['flsak_fool'],
     include_package_data=True,
     install_requires=['flask'],
