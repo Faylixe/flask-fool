@@ -1,15 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-
-A Flask extension that prevents browser access to API
-by faking browser error pages.
-
-"""
+""" A Flask extension that prevents browser access to API. """
 
 import os
-import re
 import sys
 import flask_fool
 
@@ -21,7 +15,7 @@ def readme():
     """ Transform the given markdown README to RST. """
     try:
         from m2r import parse_from_file
-        return re.sub(r'\n+', '\n', parse_from_file('README.md'))
+        return parse_from_file('README.md')
     except ImportError:
         with open('README.md') as stream:
             return stream.read()
