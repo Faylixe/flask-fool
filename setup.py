@@ -5,7 +5,7 @@
 
 import os
 import sys
-import flask_fool
+from flask_fool.version import __version__ as VERSION
 
 from setuptools import find_packages, setup
 from setuptools.command.install import install
@@ -28,17 +28,17 @@ class VerifyVersionCommand(install):
 
     def run(self):
         tag = os.getenv('CIRCLE_TAG')
-        if tag != flask_fool.__version__:
+        if tag != VERSION:
             sys.exit(
                 'Git tag %s does not match the current flask fool version %s'
-                % (tag, flask_fool.__version__))
+                % (tag, VERSION))
 
 _URL = 'https://github.com/Faylixe/flask-fool'
 _TAG_URL = _URL + '/archive/%s.tar.gz'
 
 setup(
     name='flask-fool',
-    version=flask_fool.__version__,
+    version=VERSION,
     description=__doc__,
     long_description=readme(),
     keywords='flask fool',
@@ -46,10 +46,10 @@ setup(
     author='Felix Voituret',
     author_email='felix@voituret.fr',
     url=_URL,
-    download_url=_TAG_URL % flask_fool.__version__,
+    download_url=_TAG_URL % VERSION,
     packages=['flask_fool'],
     include_package_data=True,
-    install_requires=['flask'],
+    install_requires=['Flask'],
     cmdclass={'verify': VerifyVersionCommand},
     classifiers=[
         'Environment :: Web Environment',
